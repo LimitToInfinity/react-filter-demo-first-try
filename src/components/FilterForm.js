@@ -1,28 +1,24 @@
+import React from 'react';
 
-import React, { Component } from 'react'
+function FilterForm(props) {
 
-class FilterForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            dogFilter: ""
-        }
-    }
     // handleChange function here to set dogFilter in state to value of event target
     //pass event target value to filterDogs function in handleChange
-
-    render() {
-        // console.log("dog filter in filter form", this.state.dogFilter)
-        return (
-            <div>
-                <label htmlFor="filter">Filter by Dog: </label>
-                <input type="text" id="filter"
-                // value={ this.state.dogFilter }
-                // add onchange event listener
-                />
-            </div>
-        )
+    const handleChange = (event) => {
+        const { value } = event.target;
+        props.filterDogs(value);
     }
+
+    // console.log("dog filter in filter form", this.state.dogFilter)
+    return (
+        <div>
+            <label htmlFor="filter">Filter by Dog: </label>
+            <input type="text" id="filter"
+            // add onchange event listener
+            onChange={handleChange}
+            />
+        </div>
+    );
 }
 
-export default FilterForm
+export default FilterForm;

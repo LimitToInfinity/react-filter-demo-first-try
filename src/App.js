@@ -1,40 +1,58 @@
 import React from 'react';
 import './App.css';
 
-import FilterForm from './components/FilterForm'
-// import VisibleDogs from './components/VisibleDogs'
+import FilterForm from './components/FilterForm';
+import VisibleDogs from './components/VisibleDogs';
 
 
 
 
 class App extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       dogData: [],
-      filteredDogs: []
+      filteredDogs: [],
+      filterTerm: "",
     }
   }
 
   componentDidMount() {
     fetch("https://api.thedogapi.com/v1/breeds")
       .then(response => response.json())
-      .then(data => this.setState({ dogData: data }))
+      .then(dogData => this.setState({ dogData, }));
   }
 
   //create a filterDogs function
+  filterDogs = (filterTerm) => {
+    const { dogData } = this.state;
+    const filteredDogs = dogData.filter(dog => {
+      const dogName = dog.name.toLowerCase();
+      return dogName.includes(filterTerm.toLowerCase());
+    });
+
+    this.setState({ filteredDogs, filterTerm, });
+  }
 
   render() {
-    // console.log("state", ) here
     //map through filtered dogs and pass props to VisibleDogs component
     //show VisibleDogs under FilterForm
-    // const visibleDogs = 
+    const allDogs = this.state.dogData.map((dog, index) => {
+      return <VisibleDogs key={index + 1} dog={dog}/>;
+    });
+
+    const filteredDogs = this.state.filteredDogs.map((dog, index) => {
+      return <VisibleDogs key={index + 1} dog={dog}/>;
+    });
 
     return (
       <div className="App">
         {/* pass props to filter form */ }
-        <FilterForm />
-
+        <FilterForm filterDogs={this.filterDogs} />
+        {this.state.filterTerm
+          ? filteredDogs
+          : allDogs
+        }
       </div>
     );
   }
